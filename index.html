@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trading Journal</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Flatpickr (cute date picker) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>Trading Journal</h1>
+        <p class="sub">Log trades • Track win rate • Track net P&L</p>
+      </div>
+      <div class="headerActions">
+        <button id="exportBtn" class="btn ghost">Export JSON</button>
+        <button id="clearAllBtn" class="btn danger ghost">Clear All</button>
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats">
+      <div class="card stat">
+        <div class="statTitle">Win Rate</div>
+        <div class="winWrap">
+          <div class="ring">
+            <svg width="92" height="92" viewBox="0 0 120 120">
+              <circle class="ringBg" cx="60" cy="60" r="46"></circle>
+              <circle id="ringProgress" class="ringFg" cx="60" cy="60" r="46"></circle>
+            </svg>
+            <div class="ringText">
+              <div id="winRateBig" class="big">0%</div>
+              <div id="winRateSmall" class="small">0W • 0L • 0B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card stat">
+        <div class="statTitle">Total Net P&L</div>
+        <div id="netPnlBig" class="big">$0</div>
+        <div id="netPnlSmall" class="small">Across all trades</div>
+      </div>
+
+      <div class="card stat">
+        <div class="statTitle">Trades</div>
+        <div id="tradesBig" class="big">0</div>
+        <div class="small">Logged</div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid2">
+      <div class="card">
+        <div class="cardHeader">
+          <h2>Equity Curve</h2>
+          <span class="hint">Starts at $4,475</span>
+        </div>
+        <canvas id="pnlChart"></canvas>
+
+      </div>
+
+      <div class="card">
+        <div class="cardHeader">
+          <h2>Win/Loss Split</h2>
+          <span class="hint">W (green) • L (red) • BE (gray)</span>
+        </div>
+        <canvas id="wlChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Add Trade -->
+    <section class="card">
+      <div class="cardHeader">
+        <h2>Add Trade</h2>
+        <span class="hint">Options per-contract prices • Commissions auto</span>
+      </div>
+
+      <form id="tradeForm" class="form">
+        <div class="row">
+          <div class="field">
+            <label>Trade Date</label>
+            <input type="text" id="date" placeholder="Select date" required />
+          </div>
+
+          <!-- ✅ ONLY ONE Entry Time -->
+          <div class="field">
+            <label>Entry Time</label>
+            <select id="entryTime" class="inputSelect"></select>
+          </div>
+
+          <div class="field">
+            <label>Exit Time</label>
+            <select id="exitTime" class="inputSelect"></select>
+          </div>
+
+          <div class="field">
+            <label>Ticker</label>
+            <input type="text" id="ticker" placeholder="TSLA" maxlength="8" required />
+          </div>
+
+          <div class="field">
+            <label>Strategy</label>
+            <select id="strategy" class="inputSelect" required>
+              <option value="ORB">ORB</option>
+              <option value="BBT Upside">BBT Upside</option>
+              <option value="BBT Downside">BBT Downside</option>
+              <option value="Gap Fill">Gap Fill</option>
+              <option value="Dip and Rip">Dip and Rip</option>
+              <option value="HOD">HOD</option>
+              <option value="LOD">LOD</option>
+              <option value="Rejection">Rejection</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Call / Put</label>
+            <select id="cp" class="inputSelect" required>
+              <option value="CALL">CALL</option>
+              <option value="PUT">PUT</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Days to Expiration (0–5)</label>
+            <select id="dte" class="inputSelect" required>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Strike</label>
+            <input type="number" id="strike" step="0.5" placeholder="250" required />
+          </div>
+
+          <div class="field">
+            <label>Entry (per contract)</label>
+            <input type="number" id="entry" step="0.01" placeholder="1.25" required />
+          </div>
+
+          <div class="field">
+            <label>Exit (per contract)</label>
+            <input type="number" id="exit" step="0.01" placeholder="1.60" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Contracts</label>
+            <input type="number" id="contracts" step="1" min="1" value="1" required />
+          </div>
+
+          <div class="field">
+            <label>Commissions (auto)</label>
+            <input type="text" id="commissionsPreview" disabled />
+            <div class="hint2">$0.67/contract each side (≈$1.34 round trip)</div>
+          </div>
+
+          <div class="field">
+            <label>Other Fees (optional)</label>
+            <input type="number" id="otherFees" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label>Notes (max 500)</label>
+            <textarea id="notes" maxlength="500" placeholder="Setup, reason, emotion, rules followed..."></textarea>
+            <div class="charRow">
+              <span id="charCount">0/500</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Screenshots (optional, max 2)</label>
+            <div id="dropzone" class="dropzone">
+              <div class="dropText">
+                Drag & drop images here<br/>
+                <span class="muted">or click to upload</span>
+              </div>
+              <input type="file" id="shots" accept="image/*" multiple />
+            </div>
+            <div class="hint2">Saved locally (compressed). Click thumbnails to zoom.</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn">Save Trade</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Filters + Trades -->
+    <section class="card">
+      <div class="cardHeader">
+        <h2>Trades</h2>
+        <span class="hint">Filter + sort</span>
+      </div>
+
+      <div class="filters">
+        <input id="filterTicker" class="input" placeholder="Filter ticker (e.g. TSLA)" maxlength="8"/>
+        <select id="filterOutcome" class="inputSelect">
+          <option value="ALL">All</option>
+          <option value="WIN">Winners</option>
+          <option value="LOSS">Losers</option>
+          <option value="BE">Breakeven</option>
+        </select>
+        <select id="sortBy" class="inputSelect">
+          <option value="NEWEST">Newest</option>
+          <option value="OLDEST">Oldest</option>
+          <option value="BIGWIN">Biggest Win</option>
+          <option value="BIGLOSS">Biggest Loss</option>
+        </select>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Contract</th>
+              <th>Strategy</th>
+              <th>Qty</th>
+              <th>P&L</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tradesTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Analysis -->
+    <section class="card">
+      <div class="cardHeader">
+        <h2>Analysis</h2>
+        <span class="hint">What’s working • What’s bleeding</span>
+      </div>
+
+      <div class="analysisGrid">
+        <div class="analysisCard">
+          <div class="statTitle">Avg Winner / Loser</div>
+          <div class="analysisRow">
+            <div><span class="muted">Avg Winner:</span> <strong id="avgWinner">$0</strong></div>
+            <div><span class="muted">Avg Loser:</span> <strong id="avgLoser">$0</strong></div>
+          </div>
+        </div>
+
+        <div class="analysisCard">
+          <div class="statTitle">Top 5 Best Tickers</div>
+          <div id="bestTickers" class="miniList"></div>
+        </div>
+
+        <div class="analysisCard">
+          <div class="statTitle">Top 10 Worst Tickers</div>
+          <div id="worstTickers" class="miniList"></div>
+        </div>
+
+        <div class="analysisCard analysisWide">
+          <div class="statTitle">Strategy P&L</div>
+          <div id="strategyPnL" class="miniList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PnL Calendar -->
+    <section class="card">
+      <div class="cardHeader">
+        <h2>Daily P&L Calendar</h2>
+        <span class="hint">Green/Gray/Red by day • Weekly totals on the right</span>
+      </div>
+
+      <div class="calHeader">
+        <button id="calPrev" class="iconBtn">←</button>
+        <div id="calTitle" class="calTitle">Month YYYY</div>
+        <button id="calNext" class="iconBtn">→</button>
+      </div>
+
+      <div class="calWrap">
+        <div class="calGrid" id="calGrid"></div>
+      </div>
+
+      <div class="hint2">Breakeven day = between -$10 and +$10.</div>
+    </section>
+
+    <footer class="foot">
+      <span>Local-only. Data stored in your browser (localStorage).</span>
+    </footer>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imgModal" class="modal" aria-hidden="true">
+    <div class="modalBackdrop" id="modalBackdrop"></div>
+    <div class="modalContent">
+      <button class="modalClose" id="modalClose">✕</button>
+      <img id="modalImg" alt="Screenshot large view" />
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

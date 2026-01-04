@@ -1,0 +1,360 @@
+:root{
+  --bg:#0b0f17;
+  --border:#1f2a44;
+  --text:#e7eefc;
+  --muted:#9fb0d1;
+
+  --good:#2dd4bf;
+  --bad:#fb7185;
+  --warn:#fbbf24;
+  --gray:#94a3b8;
+
+  --dayGood: rgba(45,212,191,0.22);
+  --dayBad: rgba(251,113,133,0.22);
+  --dayBe: rgba(148,163,184,0.16);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: radial-gradient(1200px 600px at 20% 0%, #152445 0%, transparent 60%),
+              radial-gradient(900px 500px at 80% 10%, #1a2a3a 0%, transparent 55%),
+              var(--bg);
+  color:var(--text);
+}
+
+.app{max-width:1180px; margin:28px auto; padding:0 16px}
+.header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin-bottom:18px;
+}
+.headerActions{display:flex; gap:10px; align-items:center}
+h1{margin:0; font-size:28px; letter-spacing:0.2px}
+.sub{margin:4px 0 0; color:var(--muted); font-size:14px}
+
+.stats{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+}
+.cardHeader{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px}
+.cardHeader h2{margin:0; font-size:16px}
+.hint{color:var(--muted); font-size:12px}
+.hint2{color:var(--muted); font-size:12px; margin-top:8px}
+
+.statTitle{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.12em}
+.big{font-size:28px; font-weight:700; margin-top:6px}
+.small{color:var(--muted); font-size:12px; margin-top:2px}
+.muted{color:var(--muted)}
+
+.winWrap{margin-top:10px}
+.ring{display:flex; align-items:center; gap:14px}
+.ring svg{transform: rotate(-90deg)}
+.ringBg{fill:none; stroke: rgba(255,255,255,0.08); stroke-width:12}
+.ringFg{
+  fill:none; stroke: var(--good); stroke-width:12;
+  stroke-linecap: round;
+  stroke-dasharray: 289;
+  stroke-dashoffset: 289;
+  transition: stroke-dashoffset 450ms ease;
+}
+.ringText{display:flex; flex-direction:column; gap:2px}
+.ringText .big{font-size:26px; margin:0}
+
+.form{display:flex; flex-direction:column; gap:12px}
+.row{
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items:start;
+}
+
+.field label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+
+/* Inputs */
+.field input, .field textarea, .input, .inputSelect, .field select{
+  width:100%;
+  background: rgba(10,14,22,0.6);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 10px;
+  color:var(--text);
+  outline:none;
+}
+.field textarea{min-height:44px; resize:vertical}
+
+.field input:focus, .field textarea:focus, .input:focus, .inputSelect:focus, .field select:focus{
+  border-color: rgba(45,212,191,0.45);
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.12);
+}
+.charRow{display:flex; justify-content:flex-end; margin-top:6px; color:var(--muted); font-size:12px}
+
+.actions{display:flex; justify-content:flex-end}
+.btn{
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(45,212,191,0.15);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:650;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background: rgba(255,255,255,0.04)}
+.btn.danger{background: rgba(251,113,133,0.12)}
+.btn.danger:hover{filter:brightness(1.12)}
+
+.filters{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px}
+.tableWrap{overflow:auto}
+.table{width:100%; border-collapse:collapse}
+.table th, .table td{
+  padding:10px 8px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:13px;
+}
+.table th{color:var(--muted); font-weight:650; text-align:left}
+
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px;
+  border:1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  font-size:12px;
+}
+
+.pnl.good{color:var(--good); font-weight:700}
+.pnl.bad{color:var(--bad); font-weight:700}
+.pnl.be{color:var(--gray); font-weight:700}
+
+.iconBtn{
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color:var(--text);
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.detailsRow{background: rgba(255,255,255,0.03)}
+.details{
+  padding:12px 10px;
+  color:var(--muted);
+  display:flex; gap:12px; flex-wrap:wrap;
+}
+.shots{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start}
+.shots img{
+  width:160px; height:auto; border-radius:10px;
+  border:1px solid rgba(255,255,255,0.10);
+  cursor:pointer;
+}
+.shots img:hover{filter:brightness(1.08)}
+
+.dropzone{
+  position:relative;
+  border:1px dashed rgba(255,255,255,0.16);
+  border-radius:12px;
+  padding:14px;
+  background: rgba(255,255,255,0.03);
+  cursor:pointer;
+}
+.dropzone.dragOver{
+  border-color: rgba(45,212,191,0.55);
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.12);
+}
+.dropzone input[type="file"]{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+.dropText{color:var(--text); font-size:13px; line-height:1.25}
+
+.foot{margin:16px 0 0; color:var(--muted); font-size:12px}
+
+/* Analysis */
+.analysisGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:12px;
+}
+.analysisCard{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+  padding:12px;
+  background: rgba(0,0,0,0.12);
+}
+.analysisWide{grid-column: 1 / -1}
+.analysisRow{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.miniList{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.miniItem{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 10px;
+  border-radius:10px;
+  background: rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  font-size:13px;
+}
+
+/* Calendar */
+.calHeader{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin:10px 0 8px;
+}
+.calTitle{font-weight:750; letter-spacing:0.2px}
+.calWrap{overflow:auto}
+.calGrid{
+  display:grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap:8px;
+  min-width: 760px;
+}
+.calDow{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  padding:4px 2px;
+}
+.calCell{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+  padding:10px;
+  min-height:72px;
+  background: rgba(255,255,255,0.02);
+}
+.calCell.good{background: var(--dayGood)}
+.calCell.bad{background: var(--dayBad)}
+.calCell.be{background: var(--dayBe)}
+.calCell.mutedDay{
+  opacity:0.45;
+  background: rgba(255,255,255,0.01);
+}
+.calDate{
+  font-size:12px;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+}
+.calPnl{
+  margin-top:10px;
+  font-size:14px;
+  font-weight:800;
+}
+.weekTotal{
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:12px;
+  padding:10px;
+  min-height:72px;
+  background: rgba(255,255,255,0.03);
+}
+.weekTotal.good{background: rgba(45,212,191,0.16)}
+.weekTotal.bad{background: rgba(251,113,133,0.16)}
+.weekTotal.be{background: rgba(148,163,184,0.12)}
+
+/* Modal */
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:999;
+}
+.modal[aria-hidden="false"]{display:block}
+.modalBackdrop{
+  position:absolute; inset:0;
+  background: rgba(0,0,0,0.72);
+}
+.modalContent{
+  position:relative;
+  max-width: 92vw;
+  max-height: 92vh;
+  margin: 4vh auto;
+  background: rgba(10,14,22,0.95);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  padding:12px;
+  width: fit-content;
+}
+.modalClose{
+  position:absolute;
+  top:10px; right:10px;
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+.modalContent img{
+  display:block;
+  max-width: 88vw;
+  max-height: 86vh;
+  border-radius:12px;
+}
+
+@media (max-width: 980px){
+  .stats{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr 1fr}
+  .analysisGrid{grid-template-columns:1fr}
+  .analysisWide{grid-column:auto}
+}
+/* ===== Zoomed-in fix overrides (paste at bottom) ===== */
+
+/* Slightly scale everything down */
+html { font-size: 15px; }
+
+/* Give the app a calmer max width + more side breathing room */
+.app{
+  max-width: 1200px;
+  margin: 22px auto;
+  padding: 0 24px;
+}
+
+/* Bring down oversized typography a touch */
+h1{ font-size: 24px; }
+.big{ font-size: 24px; }
+.ringText .big{ font-size: 22px; }
+.sub{ font-size: 13px; }
+
+/* Charts were the biggest offender — set a real height */
+.grid2 .card{ height: 380px; }
+.grid2 canvas{
+  width: 100% !important;
+  height: 300px !important;
+}
+
+/* (Optional) slightly tighter inputs so the form feels less huge */
+.field input, .field textarea, .input, .inputSelect, .field select{
+  padding: 9px 10px;
+}
