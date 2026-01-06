@@ -94,16 +94,7 @@
           </div>
 
           <!-- ✅ ONLY ONE Entry Time -->
-          <div class="field">
-            <label>Entry Time</label>
-            <select id="entryTime" class="inputSelect"></select>
-          </div>
-
-          <div class="field">
-            <label>Exit Time</label>
-            <select id="exitTime" class="inputSelect"></select>
-          </div>
-
+        
           <div class="field">
             <label>Ticker</label>
             <input type="text" id="ticker" placeholder="TSLA" maxlength="8" required />
@@ -125,31 +116,7 @@
         </div>
 
         <div class="row">
-          <div class="field">
-            <label>Call / Put</label>
-            <select id="cp" class="inputSelect" required>
-              <option value="CALL">CALL</option>
-              <option value="PUT">PUT</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Days to Expiration (0–5)</label>
-            <select id="dte" class="inputSelect" required>
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Strike</label>
-            <input type="number" id="strike" step="0.5" placeholder="250" required />
-          </div>
-
+          
           <div class="field">
             <label>Entry (per contract)</label>
             <input type="number" id="entry" step="0.01" placeholder="1.25" required />
@@ -173,11 +140,7 @@
             <div class="hint2">$0.67/contract each side (≈$1.34 round trip)</div>
           </div>
 
-          <div class="field">
-            <label>Other Fees (optional)</label>
-            <input type="number" id="otherFees" step="0.01" placeholder="0" />
-          </div>
-
+      
           <div class="field">
             <label>Notes (max 500)</label>
             <textarea id="notes" maxlength="500" placeholder="Setup, reason, emotion, rules followed..."></textarea>
